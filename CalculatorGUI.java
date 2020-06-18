@@ -3,8 +3,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.lang.Math;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
+import static java.lang.Character.isAlphabetic;
+import static java.lang.Character.isDigit;
 
 
 public class CalculatorGUI{
@@ -41,11 +50,13 @@ public class CalculatorGUI{
     JButton bTanInv;
     JButton bEvalTrig;
     JButton bEvalInvTrig;
+    JButton bAns;
+    JButton bDel;
+    JButton bPi;
+    JButton bPercent;
 
-    static double[] sinList = new double[]{0, 0.017452406437284, 0.034899496702501, 0.052335956242944, 0.069756473744125, 0.087155742747658, 0.104528463267653, 0.121869343405147, 0.139173100960065, 0.156434465040231, 0.17364817766693, 0.190808995376545, 0.207911690817759, 0.224951054343865, 0.241921895599668, 0.258819045102521, 0.275637355816999, 0.292371704722737, 0.309016994374947, 0.325568154457157, 0.342020143325669, 0.3583679495453, 0.374606593415912, 0.390731128489274, 0.4067366430758, 0.422618261740699, 0.438371146789077, 0.453990499739547, 0.469471562785891, 0.484809620246337, 0.5, 0.515038074910054, 0.529919264233205, 0.544639035015027, 0.559192903470747, 0.573576436351046, 0.587785252292473, 0.601815023152048, 0.615661475325658, 0.629320391049837, 0.642787609686539, 0.656059028990507, 0.669130606358858, 0.681998360062499, 0.694658370458997, 0.707106781186548, 0.719339800338651, 0.73135370161917, 0.743144825477394, 0.754709580222772, 0.766044443118978, 0.777145961456971, 0.788010753606722, 0.798635510047293, 0.809016994374947, 0.819152044288992, 0.829037572555042, 0.838670567945424, 0.848048096156426, 0.857167300702112, 0.866025403784439, 0.874619707139396, 0.882947592858927, 0.891006524188368, 0.898794046299167, 0.90630778703665, 0.913545457642601, 0.92050485345244, 0.927183854566787, 0.933580426497202, 0.939692620785908, 0.945518575599317, 0.951056516295154, 0.956304755963035, 0.961261695938319, 0.965925826289068, 0.970295726275996, 0.974370064785235, 0.978147600733806, 0.981627183447664, 0.984807753012208, 0.987688340595138, 0.99026806874157, 0.992546151641322, 0.994521895368273, 0.996194698091746, 0.997564050259824, 0.998629534754574, 0.999390827019096, 0.999847695156391, 1};
-    static double[] cosList = new double[sinList.length];
-    static double[] tanList = new double[sinList.length];
-    static double[] revTanList = new double[sinList.length];
+    public String ans;
+    public final double POSITIVE_ZERO = 0d;
 
     public void resetSqrt(){
         panel.remove(bEvalSqrt);
@@ -62,21 +73,100 @@ public class CalculatorGUI{
         panel.add(bEnter);
     }
 
+
+
     public CalculatorGUI(){
         frame = new JFrame();
+
+        KeyListener listener = new KeyListener(){
+            @Override
+            public void keyPressed(KeyEvent event){
+                if(String.valueOf(event.getKeyChar()).equals("1")){
+                    label.setText(label.getText() + "1");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("2")){
+                    label.setText(label.getText() + "2");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("3")){
+                    label.setText(label.getText() + "3");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("4")){
+                    label.setText(label.getText() + "4");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("5")){
+                    label.setText(label.getText() + "5");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("6")){
+                    label.setText(label.getText() + "6");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("7")){
+                    label.setText(label.getText() + "7");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("8")){
+                    label.setText(label.getText() + "8");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("9")){
+                    label.setText(label.getText() + "9");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("0")){
+                    label.setText(label.getText() + "0");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("+")){
+                    label.setText(label.getText() + "+");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("-")){
+                    label.setText(label.getText() + "-");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("*")){
+                    label.setText(label.getText() + "*");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("/")){
+                    label.setText(label.getText() + "/");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("\n")){
+                    String var = evaluate(label.getText());
+                    label.setText(var);
+                    ans = var;
+                }
+                if(String.valueOf(event.getKeyChar()).equals("c")){
+                    label.setText("\n");
+                }
+                if(String.valueOf(event.getKeyChar()).equals(".")){
+                    label.setText(label.getText() + ".");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("a")){
+                    label.setText(label.getText() + ans);
+                }
+                if(String.valueOf(event.getKeyChar()).equals("\b")){
+                    label.setText(label.getText().substring(0, label.getText().length()-1));
+                }
+                if(String.valueOf(event.getKeyChar()).equals("p")){
+                    label.setText(label.getText() + Math.PI);
+                }
+                if(String.valueOf(event.getKeyChar()).equals("^")){
+                    label.setText(label.getText() + "^");
+                }
+                if(String.valueOf(event.getKeyChar()).equals("%")){
+                    label.setText(Double.toString(Double.parseDouble(label.getText())/100));
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent event){}
+            @Override
+            public void keyTyped(KeyEvent event){}
+        };
 
         label = new JLabel("\n");
         label.setFont(new Font("Verdana", Font.PLAIN, 32));
         label.setHorizontalAlignment(SwingConstants.RIGHT);
 
-
-        //b1.getActionForKeyStroke(KeyStroke.getKeyStroke("1"));
-
-
         b1 = new JButton(new AbstractAction("1") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            public void doClick(ActionEvent e) {
                 label.setText(label.getText() + "1");
+            }
+            @Override
+            public void actionPerformed(ActionEvent e){
+                doClick(e);
             }
         });
         b2 = new JButton(new AbstractAction("2") {
@@ -160,13 +250,15 @@ public class CalculatorGUI{
         bEnter = new JButton(new AbstractAction("enter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                label.setText(evaluate(label.getText()));
+                String var = evaluate(label.getText());
+                label.setText(var);
+                ans = var;
             }
         });
         bClear = new JButton(new AbstractAction("clear") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                label.setText(" ");
+                label.setText("\n");
             }
         });
         bExp = new JButton(new AbstractAction("^") {
@@ -186,18 +278,16 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("sin ");
-                }
+                label.setText("sin ");
+                b1.addKeyListener(listener);
             }
         });
         bEvalTrig = new JButton(new AbstractAction("enter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                label.setText(evalTrig(label.getText()));
+                String var = evaluate(label.getText());
+                label.setText(var);
+                ans = var;
                 resetTrig();
             }
         });
@@ -206,12 +296,7 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("cos ");
-                }
+                label.setText("cos ");
             }
         });
         bTan = new JButton(new AbstractAction("tan") {
@@ -219,18 +304,15 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("tan ");
-                }
+                label.setText("tan ");
             }
         });
         bEvalInvTrig = new JButton(new AbstractAction("enter") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                label.setText(evalInvTrig(label.getText()));
+                String var = evaluate(label.getText());
+                label.setText(var);
+                ans = var;
                 resetInvTrig();
             }
         });
@@ -239,12 +321,7 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalInvTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("arcsin ");
-                }
+                label.setText("arcsin ");
             }
         });
         bCosInv = new JButton(new AbstractAction("arccos") {
@@ -252,12 +329,7 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalInvTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("arccos ");
-                }
+                label.setText("arccos ");
             }
         });
         bTanInv = new JButton(new AbstractAction("arctan") {
@@ -265,15 +337,53 @@ public class CalculatorGUI{
             public void actionPerformed(ActionEvent e) {
                 panel.remove(bEnter);
                 panel.add(bEvalInvTrig);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("arctan ");
-                }
+                label.setText("arctan ");
+            }
+        });
+        bAns = new JButton(new AbstractAction("ans") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText(label.getText() + ans);
+            }
+        });
+        bDel = new JButton(new AbstractAction("del") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText(label.getText().substring(0, label.getText().length()-1));
+            }
+        });
+        bPi = new JButton(new AbstractAction("π") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText(label.getText() + Math.PI);
+            }
+        });
+        bPercent = new JButton(new AbstractAction("%") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                label.setText(Double.toString(Double.parseDouble(label.getText())/100));
+            }
+        });
+        bEvalSqrt = new JButton(new AbstractAction("enter") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String var = evaluate(label.getText());
+                label.setText(var);
+                ans = var;
+                resetSqrt();
             }
         });
 
+        bSqrt = new JButton(new AbstractAction("√") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                panel.remove(bEnter);
+                panel.add(bEvalSqrt);
+                label.setText("√");
+            }
+        });
+
+        b1.addKeyListener(listener);
 
         panel = new JPanel();
         panel.setLayout(new GridLayout(7, 3));
@@ -293,37 +403,36 @@ public class CalculatorGUI{
         panel.add(bMult);
         panel.add(bDiv);
         panel.add(bExp);
-
-        bEvalSqrt = new JButton(new AbstractAction("enter") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                label.setText(evalSqrt(label.getText().substring(1, label.getText().length())));
-                resetSqrt();
-            }
-        });
-
-        bSqrt = new JButton(new AbstractAction("√") {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                panel.remove(bEnter);
-                panel.add(bEvalSqrt);
-                if(label.getText()!=" "){
-                    label.setText("Error");
-                }
-                else{
-                    label.setText("√");
-                }
-            }
-        });
         panel.add(bSqrt);
+        panel.add(bPercent);
+        panel.add(bPi);
         panel.add(bSin);
         panel.add(bCos);
         panel.add(bTan);
         panel.add(bSinInv);
         panel.add(bCosInv);
         panel.add(bTanInv);
+        panel.add(bAns);
+        panel.add(bDel);
         panel.add(bEnter);
 
+
+        /*frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                /*JButton typedButton = buttonMap.get(String.valueOf(e.getKeyChar()));
+                if (typedButton!=null){
+                    typedButton.doClick();
+                }
+                if(String.valueOf(e.getKeyChar())=="1"){
+                    label.setText(label.getText() + "1");
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e){}
+        });*/
 
         frame.add(panel, BorderLayout.CENTER);
         frame.add(label, BorderLayout.NORTH);
@@ -336,14 +445,16 @@ public class CalculatorGUI{
     }
 
     public static void main(String[] args) {
-        findCosList();
-        findTanList();
-        findReverseTanList();
+//        findCosList();
+//        findTanList();
+//        findReverseTanList();
+
 
         new CalculatorGUI();
+
     }
 
-    public String evaluate(String expression){
+    public String eval2(String expression){
         //char[] temp = expression.toCharArray();
         char[] charList = expression.toCharArray(); //new char[temp.length-1];
         /*for (int i=1; i<temp.length; i++){
@@ -360,12 +471,23 @@ public class CalculatorGUI{
             num1List[num1List.length-1] = charList[counter];
             counter++;
         }
+        for(int i=0; i<charList.length; i++){
+            if(charList[i]=='s' || charList[i]=='t'){
+                for(int j=0; j<charList.length; j++){
+                    if(charList[j]=='r'){
+                        return evalInvTrig(expression);
+                    }
+                }
+                return evalTrig(expression);
+            }
+        }
         String num1Str = new String(num1List);
         double num1 = Double.parseDouble(num1Str);
         char operator = charList[counter];
 
         char[] num2List = new char[0];
-        while (++counter < charList.length){
+        counter++;
+        while (counter < charList.length){
             num2List = Arrays.copyOf(num2List, num2List.length+1);
             num2List[num2List.length-1] = charList[counter];
             counter++;
@@ -373,33 +495,44 @@ public class CalculatorGUI{
         String num2Str = new String(num2List);
         double num2 = Double.parseDouble(num2Str);
 
-        double ans = 0;
+        double answer = 0;
         if (operator == '+'){
-            ans = Add(num1, num2);
+            answer = Add(num1, num2);
         }
         else if (operator == '-'){
-            ans = Subtr(num1, num2);
+            answer = Subtr(num1, num2);
         }
         else if (operator == '*'){
-            ans = Mult(num1, num2);
+            answer = Mult(num1, num2);
         }
         else if (operator == '/'){
-            ans = Div(num1, num2);
+            answer = Div(num1, num2);
         }
         else if (operator == '^'){
-            ans = Exp(num1, num2);
+            answer = Exp(num1, num2);
         }
         else{
             label.setText("something went wrong with the operator");
         }
 
-        return Double.toString(ans);
+        return Double.toString(answer);
     }
 
-    public String evalSqrt(String expression){
+    public String evaluate(String expression){
         char[] numList = expression.toCharArray();
+        for(int i=0; i<numList.length;i++){
+            if(numList[i]==' '||numList[i]=='\n'){
+                continue;
+            }
+            else if((!(isDigit(numList[i])||(isAlphabetic(numList[i]))))&&(!(numList[i]==' '||numList[i]=='\n'))){
+                break;
+            }
+            else{
+               return eval2(expression);
+            }
+        }
         String numStr = new String(numList);
-        double num = Double.parseDouble(numStr);
+        double num = Double.parseDouble(numStr.substring(1, numStr.length()));
         return Double.toString(Math.sqrt(num));
     }
 
@@ -411,133 +544,36 @@ public class CalculatorGUI{
             numList[numList.length-1] = temp[i];
         }
         String numStr = new String(numList);
-        int num = Integer.parseInt(numStr);
-        System.out.println(num);
-        System.out.println(expression.substring(0, 3));
+        Double num = Double.parseDouble(numStr);
         if(expression.substring(0, 3).equals("sin")){
-            if(num<=90){
-                return Double.toString(sinList[num]);
-            }
-            else if(num<=180){
-                return Double.toString(cosList[num-90]);
-            }
-            else if(num<=270){
-                return Double.toString(sinList[num-180]*-1);
-            }
-            else if(num<=360){
-                return Double.toString(cosList[num-270]*-1);
-            }
-            return "Error";
+            return Double.toString(round(Math.sin(Math.toRadians(num)), 15));
         }
         else if(expression.substring(0, 3).equals("cos")){
-            if(num<=90){
-                return Double.toString(cosList[num]);
-            }
-            else if(num<=180){
-                return Double.toString(sinList[num-90]*-1);
-            }
-            else if(num<=270){
-                return Double.toString(cosList[num-180]*-1);
-            }
-            else if(num<=360){
-                return Double.toString(sinList[num-270]);
-            }
-            return "Error";
+            return Double.toString(round(Math.cos(Math.toRadians(num)), 15));
         }
         else if(expression.substring(0, 3).equals("tan")){
-            if(num<=90){
-                return Double.toString(tanList[num]);
-            }
-            else if(num<=180){
-                return Double.toString(revTanList[num-90]*-1);
-            }
-            else if(num<=270){
-                return Double.toString(tanList[num-180]);
-            }
-            else if(num<=360){
-                return Double.toString(revTanList[num-270]*-1);
-            }
-            return "Error";
+            return Double.toString(round(Math.tan(Math.toRadians(num)), 15));
         }
-        else{
-            return "Error";
-        }
+        return "Error";
     }
 
     public String evalInvTrig(String expression){
         char[] temp = expression.toCharArray();
         char[] numList = new char[0];
-        for(int i=4; i<temp.length; i++){
+        for(int i=7; i<temp.length; i++){
             numList = Arrays.copyOf(numList, numList.length + 1);
             numList[numList.length-1] = temp[i];
         }
         String numStr = new String(numList);
-        int num = Integer.parseInt(numStr);
+        double num = Double.parseDouble(numStr);
         if(expression.substring(3, 6).equals("sin")){
-            if(num>=0){
-                for(int i=0; i<90; i++){
-                    if(num==sinList[i]){
-                        return Integer.toString(i);
-                    }
-                    else{
-                        return "Error";
-                    }
-                }
-            }
-            else{
-                num = num*-1;
-                for(int i=0; i<90; i++){
-                    if(num==sinList[i]){
-                        return Integer.toString(i*-1);
-                    }
-                    else{
-                        return "Error";
-                    }
-                }
-            }
+            return Double.toString(round(Math.toDegrees(Math.asin(num)), 2));
         }
         else if(expression.substring(3, 6).equals("cos")){
-            if(num>=0){
-                for(int i=0; i<90; i++){
-                    if(num==cosList[i]){
-                        return Integer.toString(i);
-                    }
-                    else{
-                        return "Error";
-                    }
-                }
-            }
-            else{
-                num = num*-1;
-                for(int i=0; i<90; i++){
-                    if(num==sinList[i]){
-                        return Integer.toString(i+90);
-                    }
-                    else{
-                        return "Error";
-                    }
-                }
-            }
+            return Double.toString(round(Math.toDegrees(Math.acos(num)), 2));
         }
         else if(expression.substring(3, 6).equals("tan")) {
-            if (num >= 0) {
-                for (int i = 0; i < 90; i++) {
-                    if (num == tanList[i]) {
-                        return Integer.toString(i);
-                    } else {
-                        return "Error";
-                    }
-                }
-            } else {
-                num = num * -1;
-                for (int i = 0; i < 90; i++) {
-                    if (num == tanList[i]) {
-                        return Integer.toString(i * -1);
-                    } else {
-                        return "Error";
-                    }
-                }
-            }
+            return Double.toString(round(Math.toDegrees(Math.atan(num)), 2));
         }
         return "Error";
     }
@@ -551,23 +587,22 @@ public class CalculatorGUI{
     }
 
     public double Mult(double num1, double num2){
-        return num1*num2;
+        return round(num1*num2, 2);
     }
     public double Div(double num1, double num2){
-        return (num1/num2);
+        return round(num1/num2, 2);
     }
     public double Exp(double num1, double num2){
-        return Math.pow(num1, num2);
+        return round(Math.pow(num1, num2), 2);
     }
 
-    public static void findCosList(){
+/*    public static void findCosList(){
         int j = sinList.length;
         for(int i=0; i<cosList.length; i++){
             cosList[j-1] = sinList[i];
             j = j-1;
         }
         for(int i=0; i<90; i++){
-            System.out.print(cosList[i] + ", ");
         }
 
     }
@@ -587,5 +622,25 @@ public class CalculatorGUI{
             revTanList[j-1] = tanList[i];
             j = j-1;
         }
+    }*/
+
+    public double round(double x, int scale){
+        return roundHelper(x, scale, BigDecimal.ROUND_HALF_UP);
     }
+
+    public double roundHelper(double x, int scale, int roundingMethod){
+        try{
+            final double rounded = (new BigDecimal(Double.toString(x)).setScale(scale, roundingMethod)).doubleValue();
+            return rounded== POSITIVE_ZERO ? POSITIVE_ZERO * x : rounded;
+        } catch (NumberFormatException ex){
+            if(Double.isInfinite(x)){
+                return x;
+            } else{
+                return Double.NaN;
+            }
+        }
+    }
+
+
+
 }
